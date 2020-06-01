@@ -1,15 +1,22 @@
 from bs4 import BeautifulSoup
 import requests
+import csv # saving it in csv file
 
 source = requests.get('http://coreyms.com').text
 
 soup = BeautifulSoup(source, 'lxml')
+
+csv_file = open('ps_scrape.csv', 'w') # w is for write
+
+csv_witer = csv.writer(csv_file)
+csv_witer.writerow(['headline', 'summary', 'video_link'])
 
 # print(soup.prettify())
 
 # article = soup.find('article')
 # print(article.prettify())
 for article in soup.find_all('article'):
+
   headline = article.h2.a.text
   print(headline)
 
@@ -30,3 +37,7 @@ for article in soup.find_all('article'):
 
   print(yt_link)
   print()
+
+  csv_witer.writerow([headline, summary, yt_link])
+
+csv_file.close()
